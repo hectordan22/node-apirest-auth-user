@@ -2,6 +2,7 @@ import { Request,Response } from "express"
 import { comparePasswords, hashPassword } from '../services/password.service'
 import  prisma from '../models/user'
 import { generateToken } from "../services/auth.services"
+import { type } from "os"
 
 
 export const register = async (req: Request,res: Response): Promise<void> => {
@@ -58,12 +59,23 @@ export const login = async (req:Request, res:Response): Promise<void> => {
       console.log(user)
 
       if (!user) {
+         console.log(user)
          res.status(404).json({error:'El usuario y la contraseña no coinciden'})
          return
 
       }
 
       // verifico la coincidencia de la contraseña de la base de datos con la que ingresa el usuario 
+      console.log([
+         {
+            name:'del usuario',
+            type: typeof password
+         },
+         {
+            name:'de la bd',
+            type: typeof user.password
+         }
+      ])
       const passwordMatch = await comparePasswords(password,user.password)
       if (!passwordMatch) {
           res.status(401).json({error:'Usuario y contraseña no coinciden'})
