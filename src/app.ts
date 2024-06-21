@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 dotenv.config()
 import express from 'express'
-import cors from 'cors'
+const cors = require('cors')
 import authRoutes from './routes/authRoutes'
 import userRoutes from './routes/userRoutes'
 const app = express()
