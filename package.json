@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsnd --respawn --clear src/server.ts",
-    "build":"rimraf ./dist && tsc",
+    "build": "rimraf ./dist && tsc",
     "start": "node dist/server.js"
   },
   "author": "Hector Salas",
@@ -22,6 +22,7 @@
   "dependencies": {
     "@prisma/client": "^5.15.0",
     "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",

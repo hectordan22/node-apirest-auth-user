@@ -2,7 +2,6 @@ import { Request,Response } from "express"
 import { comparePasswords, hashPassword } from '../services/password.service'
 import  prisma from '../models/user'
 import { generateToken } from "../services/auth.services"
-import { type } from "os"
 
 
 export const register = async (req: Request,res: Response): Promise<void> => {
