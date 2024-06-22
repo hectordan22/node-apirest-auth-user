@@ -29,6 +29,7 @@ export const register = async (req: Request,res: Response): Promise<void> => {
      const token = generateToken(user)
      res.status(201).json({token})
    } catch (error:any) {
+      console.log(error)
       // en caso de Postgresql detecte que se intenta registrar un email duplicado
      if (error?.code === 'P202' && error?.meta?.target?.includes('email')){
         res.status(400).json({message:"El email ingresado ya existe"})
