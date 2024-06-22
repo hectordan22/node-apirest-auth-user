@@ -27,7 +27,7 @@ export const createUser = async (req:Request, res:Response): Promise <void> => {
       res.status(201).json({ user})
     } catch (error:any) {
          // en caso de Postgresql detecte que se intenta registrar un email duplicado
-     if (error?.code === 'P202' && error?.meta?.target?.includes('email')){
+     if (error?.code === 'P2002' && error?.meta?.target?.includes('email')){
         res.status(400).json({message:"El email ingresado ya existe"})
      } else{
        res.status(500).json({error:'Hubo un error pruebe mas tarde'})
@@ -93,7 +93,7 @@ export const updateUser = async (req:Request, res:Response) : Promise <void> => 
        res.status(200).json({user})
     } catch (error:any) {
         console.log(error)
-        if (error?.code === 'P202' && error?.meta?.target?.includes('email')){
+        if (error?.code === 'P2002' && error?.meta?.target?.includes('email')){
             res.status(400).json({message:"El email ingresado ya existe"})
          } else if (error?.code === 'P2025'){
            res.status(404).json({error:'Usuario no encontrado'})
