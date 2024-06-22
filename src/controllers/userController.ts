@@ -7,11 +7,11 @@ export const createUser = async (req:Request, res:Response): Promise <void> => {
         const { email, password } = req.body
 
         if (!email) {
-            res.status(400).json({message:"El email es obligatorio"})
+            res.status(400).json({error:true, message:"El email es obligatorio"})
             return
          }
          if (!password){
-            res.status(400).json({message:"El email ingresado ya existe"})
+            res.status(400).json({error:true, message:"El email ingresado ya existe"})
             return
          }
 
@@ -24,13 +24,13 @@ export const createUser = async (req:Request, res:Response): Promise <void> => {
         }
      })
 
-      res.status(201).json({ user})
+      res.status(201).json({ error:false, user })
     } catch (error:any) {
          // en caso de Postgresql detecte que se intenta registrar un email duplicado
      if (error?.code === 'P2002' && error?.meta?.target?.includes('email')){
-        res.status(400).json({message:"El email ingresado ya existe"})
+        res.status(400).json({error:true, message:"El email ingresado ya existe"})
      } else{
-       res.status(500).json({error:'Hubo un error pruebe mas tarde'})
+       res.status(500).json({error:true, message:'Hubo un error pruebe mas tarde'})
      }
     }
 }
@@ -38,9 +38,9 @@ export const createUser = async (req:Request, res:Response): Promise <void> => {
 export const getAllUsers = async (req:Request, res:Response) : Promise <void> => {
      try {
         const users = await prisma.findMany()
-        res.status(200).json({users})
+        res.status(200).json({error:false, users})
      } catch (error:any) {
-        res.status(500).json({error:'Hubo un error pruebe mas tarde'})
+        res.status(500).json({error:true, message:'Hubo un error pruebe mas tarde'})
      }
 }
 
@@ -55,13 +55,13 @@ export const getUserById = async (req:Request, res:Response) : Promise <void> =>
        })
 
        if (!user) {
-          res.status(404).json({ error: 'el usuario no fue encontrado'})
+          res.status(404).json({ error:true, message:'el usuario no fue encontrado'})
           return
        }
 
-       res.status(200).json({user})
+       res.status(200).json({error:false, user})
     } catch (error:any) {
-       res.status(500).json({error:'Hubo un error pruebe mas tarde'})
+       res.status(500).json({error:true, message:'Hubo un error pruebe mas tarde'})
     }
 }
 
@@ -90,15 +90,14 @@ export const updateUser = async (req:Request, res:Response) : Promise <void> => 
          data: dataToUpdate
        })
 
-       res.status(200).json({user})
+       res.status(200).json({error:false, user})
     } catch (error:any) {
-        console.log(error)
         if (error?.code === 'P2002' && error?.meta?.target?.includes('email')){
-            res.status(400).json({message:"El email ingresado ya existe"})
+            res.status(400).json({error:true, message:"El email ingresado ya existe"})
          } else if (error?.code === 'P2025'){
-           res.status(404).json({error:'Usuario no encontrado'})
+           res.status(404).json({error:true, message:'Usuario no encontrado'})
          }else{
-             res.status(500).json({error:'Hubo un error pruebe mas tarde'})
+             res.status(500).json({error:true, message:'Hubo un error pruebe mas tarde'})
          }
     }
 }
@@ -113,13 +112,14 @@ export const deleteUser = async (req: Request, res: Response): Promise <void> =>
       })
 
       res.status(200).json({
+        error:false,
         message: `El usuario ${userId} ha sido eliminado`
       }).end()
    } catch (error:any) {
     if (error?.code === 'P2025'){
-        res.status(404).json({error:'Usuario no encontrado'})
+        res.status(404).json({error:true, message:'Usuario no encontrado'})
       }else{
-          res.status(500).json({error:'Hubo un error pruebe mas tarde'})
+          res.status(500).json({error:true, message:'Hubo un error pruebe mas tarde'})
       }
    }
 }
