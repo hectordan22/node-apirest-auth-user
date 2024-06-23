@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsnd --respawn --clear src/server.ts",
-    "build": "./dist && tsc",
+    "build": "rimraf ./dist && tsc",
     "start": "node dist/server.js"
   },
   "author": "Hector Salas",
