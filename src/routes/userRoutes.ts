@@ -12,13 +12,13 @@ const authenticateToken = (req:Request, res: Response, next:NextFunction) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]
     if (!token) {
-        return res.status(401).json({error:'No Autorizado'})
+        return res.status(401).json({error:true, message:'No Autorizado. Por favor iniciar sesion'})
     }
 
     jwt.verify(token, JWT_SECRET, (err,decoded) => {
         if (err) {
             console.error('error en la autenticacion: ', err)
-            return res.status(403).json({error:'No tienes acceso a este recurso'})
+            return res.status(403).json({error:true, message:'No tienes acceso a este recurso. Por favor iniciar sesion'})
         }
 
         next();
