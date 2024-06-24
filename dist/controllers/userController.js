@@ -18,7 +18,7 @@ const user_1 = __importDefault(require("../models/user"));
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {
-        const { email, password } = req.body;
+        const { email, password, name } = req.body;
         if (!email) {
             res.status(400).json({ error: true, message: "El email es obligatorio" });
             return;
@@ -28,12 +28,14 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             return;
         }
         const hashedPassword = yield (0, password_service_1.hashPassword)(password);
+        const body = {
+            email,
+            password: hashedPassword,
+            nombre: name || 'user'
+        };
         // registro el user en la BD
         const user = yield user_1.default.create({
-            data: {
-                email,
-                password: hashedPassword
-            }
+            data: body
         });
         res.status(201).json({ error: false, user });
     }
@@ -80,7 +82,7 @@ exports.getUserById = getUserById;
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c, _d;
     const userId = parseInt(req.params.id);
-    const { password, email } = req.body;
+    const { password, email, name } = req.body;
     try {
         let dataToUpdate = Object.assign({}, req.body);
         if (password) {
@@ -90,6 +92,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         if (email) {
             dataToUpdate.email = email;
         }
+        dataToUpdate.name = name || 'user';
         // actualizo en la base de datos
         const user = yield user_1.default.update({
             where: {

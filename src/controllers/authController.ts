@@ -5,7 +5,7 @@ import { generateToken } from "../services/auth.services"
 
 
 export const register = async (req: Request,res: Response): Promise<void> => {
-   const { email, password} = req.body
+   const { email, password, name } = req.body
    try {
       if (!email) {
          res.status(400).json({error:true, message:"El email es obligatorio"})
@@ -15,14 +15,16 @@ export const register = async (req: Request,res: Response): Promise<void> => {
          res.status(400).json({ error: true, message:"El email ingresado ya existe"})
          return
       }
-
+      
      const hashedPassword = await hashPassword(password)
      // registro el user en la BD
+     const body = {
+      email,
+      password:hashedPassword,
+      nombre: name || 'user'
+     }
      const user = await prisma.create({
-        data:{
-           email,
-           password:hashedPassword
-        }
+        data:body
      })
 
      // creo token para el usuario

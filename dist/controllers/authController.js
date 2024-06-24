@@ -18,7 +18,7 @@ const user_1 = __importDefault(require("../models/user"));
 const auth_services_1 = require("../services/auth.services");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
-    const { email, password } = req.body;
+    const { email, password, name } = req.body;
     try {
         if (!email) {
             res.status(400).json({ error: true, message: "El email es obligatorio" });
@@ -30,11 +30,13 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const hashedPassword = yield (0, password_service_1.hashPassword)(password);
         // registro el user en la BD
+        const body = {
+            email,
+            password: hashedPassword,
+            nombre: name || 'user'
+        };
         const user = yield user_1.default.create({
-            data: {
-                email,
-                password: hashedPassword
-            }
+            data: body
         });
         // creo token para el usuario
         const token = (0, auth_services_1.generateToken)(user);

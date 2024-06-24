@@ -4,8 +4,7 @@ import  prisma from '../models/user'
 
 export const createUser = async (req:Request, res:Response): Promise <void> => {
     try {
-        const { email, password } = req.body
-
+        const { email, password, name} = req.body
         if (!email) {
             res.status(400).json({error:true, message:"El email es obligatorio"})
             return
@@ -16,12 +15,14 @@ export const createUser = async (req:Request, res:Response): Promise <void> => {
          }
 
         const hashedPassword = await hashPassword(password)
+        const body = {
+            email,
+            password:hashedPassword,
+            nombre: name || 'user'
+         }
      // registro el user en la BD
      const user = await prisma.create({
-        data:{
-           email,
-           password:hashedPassword
-        }
+        data:body
      })
 
       res.status(201).json({ error:false, user })
@@ -68,7 +69,7 @@ export const getUserById = async (req:Request, res:Response) : Promise <void> =>
 export const updateUser = async (req:Request, res:Response) : Promise <void> => {
 
     const userId = parseInt(req.params.id)  
-    const { password, email}= req.body
+    const { password, email, name }= req.body
     try {
         let dataToUpdate : any = {
             ...req.body
@@ -82,6 +83,9 @@ export const updateUser = async (req:Request, res:Response) : Promise <void> => 
         if (email) {
             dataToUpdate.email = email
         }
+       
+        dataToUpdate.name = name ||'user'
+         
         // actualizo en la base de datos
        const user = await prisma.update({
         where: {
