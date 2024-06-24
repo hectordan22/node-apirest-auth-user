@@ -18,7 +18,7 @@ const authenticateToken = (req:Request, res: Response, next:NextFunction) => {
     jwt.verify(token, JWT_SECRET, (err,decoded) => {
         if (err) {
             console.error('error en la autenticacion: ', err)
-            return res.status(403).json({error:true, message:'No tienes acceso a este recurso. Por favor iniciar sesion'})
+            return res.status(403).json({error:true, message:' No tienes acceso a este recurso. Por favor iniciar sesion'})
         }
 
         next();
